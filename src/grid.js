@@ -23,18 +23,18 @@
 */
 
 
-var GridSampler = {};
+let GridSampler = {};
 
 GridSampler.checkAndNudgePoints=function( image,  points)
 		{
-			var width = qrcode.width;
-			var height = qrcode.height;
+			let width = qrcode.width;
+			let height = qrcode.height;
 			// Check and nudge points from start until we see some that are OK:
-			var nudged = true;
-			for (var offset = 0; offset < points.length && nudged; offset += 2)
+			let nudged = true;
+			for (let offset = 0; offset < points.length && nudged; offset += 2)
 			{
-				var x = Math.floor (points[offset]);
-				var y = Math.floor( points[offset + 1]);
+				let x = Math.floor (points[offset]);
+				let y = Math.floor( points[offset + 1]);
 				if (x < - 1 || x > width || y < - 1 || y > height)
 				{
 					throw "Error.checkAndNudgePoints ";
@@ -63,10 +63,10 @@ GridSampler.checkAndNudgePoints=function( image,  points)
 			}
 			// Check and nudge points from end:
 			nudged = true;
-			for (var offset = points.length - 2; offset >= 0 && nudged; offset -= 2)
+			for (let offset = points.length - 2; offset >= 0 && nudged; offset -= 2)
 			{
-				var x = Math.floor( points[offset]);
-				var y = Math.floor( points[offset + 1]);
+				let x = Math.floor( points[offset]);
+				let y = Math.floor( points[offset + 1]);
 				if (x < - 1 || x > width || y < - 1 || y > height)
 				{
 					throw "Error.checkAndNudgePoints ";
@@ -99,13 +99,13 @@ GridSampler.checkAndNudgePoints=function( image,  points)
 
 GridSampler.sampleGrid3=function( image,  dimension,  transform)
 		{
-			var bits = new BitMatrix(dimension);
-			var points = new Array(dimension << 1);
-			for (var y = 0; y < dimension; y++)
+			let bits = new BitMatrix(dimension);
+			let points = new Array(dimension << 1);
+			for (let y = 0; y < dimension; y++)
 			{
-				var max = points.length;
-				var iValue =  y + 0.5;
-				for (var x = 0; x < max; x += 2)
+				let max = points.length;
+				let iValue =  y + 0.5;
+				for (let x = 0; x < max; x += 2)
 				{
 					points[x] =  (x >> 1) + 0.5;
 					points[x + 1] = iValue;
@@ -116,10 +116,10 @@ GridSampler.sampleGrid3=function( image,  dimension,  transform)
 				GridSampler.checkAndNudgePoints(image, points);
 				try
 				{
-					for (var x = 0; x < max; x += 2)
+					for (let x = 0; x < max; x += 2)
 					{
 						//var xpoint = (Math.floor( points[x]) * 4) + (Math.floor( points[x + 1]) * qrcode.width * 4);
-                        var bit = image[Math.floor( points[x])+ qrcode.width* Math.floor( points[x + 1])];
+                        let bit = image[Math.floor( points[x])+ qrcode.width* Math.floor( points[x + 1])];
 						//qrcode.imagedata.data[xpoint] = bit?255:0;
 						//qrcode.imagedata.data[xpoint+1] = bit?255:0;
 						//qrcode.imagedata.data[xpoint+2] = 0;
@@ -146,7 +146,7 @@ GridSampler.sampleGrid3=function( image,  dimension,  transform)
 
 GridSampler.sampleGridx=function( image,  dimension,  p1ToX,  p1ToY,  p2ToX,  p2ToY,  p3ToX,  p3ToY,  p4ToX,  p4ToY,  p1FromX,  p1FromY,  p2FromX,  p2FromY,  p3FromX,  p3FromY,  p4FromX,  p4FromY)
 {
-	var transform = PerspectiveTransform.quadrilateralToQuadrilateral(p1ToX, p1ToY, p2ToX, p2ToY, p3ToX, p3ToY, p4ToX, p4ToY, p1FromX, p1FromY, p2FromX, p2FromY, p3FromX, p3FromY, p4FromX, p4FromY);
+	let transform = PerspectiveTransform.quadrilateralToQuadrilateral(p1ToX, p1ToY, p2ToX, p2ToY, p3ToX, p3ToY, p4ToX, p4ToY, p1FromX, p1FromY, p2FromX, p2FromY, p3FromX, p3FromY, p4FromX, p4FromY);
 			
 	return GridSampler.sampleGrid3(image, dimension, transform);
 }
