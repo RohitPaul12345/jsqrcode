@@ -36,33 +36,33 @@ function PerspectiveTransform( a11,  a21,  a31,  a12,  a22,  a32,  a13,  a23,  a
 	this.a33 = a33;
 	this.transformPoints1=function( points)
 		{
-			var max = points.length;
-			var a11 = this.a11;
-			var a12 = this.a12;
-			var a13 = this.a13;
-			var a21 = this.a21;
-			var a22 = this.a22;
-			var a23 = this.a23;
-			var a31 = this.a31;
-			var a32 = this.a32;
-			var a33 = this.a33;
-			for (var i = 0; i < max; i += 2)
+			let max = points.length;
+			let a11 = this.a11;
+			let a12 = this.a12;
+			let a13 = this.a13;
+			let a21 = this.a21;
+			let a22 = this.a22;
+			let a23 = this.a23;
+			let a31 = this.a31;
+			let a32 = this.a32;
+			let a33 = this.a33;
+			for (let i = 0; i < max; i += 2)
 			{
-				var x = points[i];
-				var y = points[i + 1];
-				var denominator = a13 * x + a23 * y + a33;
+				let x = points[i];
+				let y = points[i + 1];
+				let denominator = a13 * x + a23 * y + a33;
 				points[i] = (a11 * x + a21 * y + a31) / denominator;
 				points[i + 1] = (a12 * x + a22 * y + a32) / denominator;
 			}
 		}
 	this. transformPoints2=function(xValues, yValues)
 		{
-			var n = xValues.length;
-			for (var i = 0; i < n; i++)
+			let n = xValues.length;
+			for (let i = 0; i < n; i++)
 			{
-				var x = xValues[i];
-				var y = yValues[i];
-				var denominator = this.a13 * x + this.a23 * y + this.a33;
+				let x = xValues[i];
+				let y = yValues[i];
+				let denominator = this.a13 * x + this.a23 * y + this.a33;
 				xValues[i] = (this.a11 * x + this.a21 * y + this.a31) / denominator;
 				yValues[i] = (this.a12 * x + this.a22 * y + this.a32) / denominator;
 			}
@@ -83,28 +83,28 @@ function PerspectiveTransform( a11,  a21,  a31,  a12,  a22,  a32,  a13,  a23,  a
 PerspectiveTransform.quadrilateralToQuadrilateral=function( x0,  y0,  x1,  y1,  x2,  y2,  x3,  y3,  x0p,  y0p,  x1p,  y1p,  x2p,  y2p,  x3p,  y3p)
 {
 	
-	var qToS = this.quadrilateralToSquare(x0, y0, x1, y1, x2, y2, x3, y3);
-	var sToQ = this.squareToQuadrilateral(x0p, y0p, x1p, y1p, x2p, y2p, x3p, y3p);
+	let qToS = this.quadrilateralToSquare(x0, y0, x1, y1, x2, y2, x3, y3);
+	let sToQ = this.squareToQuadrilateral(x0p, y0p, x1p, y1p, x2p, y2p, x3p, y3p);
 	return sToQ.times(qToS);
 }
 
 PerspectiveTransform.squareToQuadrilateral=function( x0,  y0,  x1,  y1,  x2,  y2,  x3,  y3)
 {
-	var dy2 = y3 - y2;
-	var dy3 = y0 - y1 + y2 - y3;
+	let dy2 = y3 - y2;
+	let dy3 = y0 - y1 + y2 - y3;
 	if (dy2 == 0.0 && dy3 == 0.0)
 	{
 		return new PerspectiveTransform(x1 - x0, x2 - x1, x0, y1 - y0, y2 - y1, y0, 0.0, 0.0, 1.0);
 	}
 	else
 	{
-		var dx1 = x1 - x2;
-		var dx2 = x3 - x2;
-		var dx3 = x0 - x1 + x2 - x3;
-		var dy1 = y1 - y2;
-		var denominator = dx1 * dy2 - dx2 * dy1;
-		var a13 = (dx3 * dy2 - dx2 * dy3) / denominator;
-		var a23 = (dx1 * dy3 - dx3 * dy1) / denominator;
+		let dx1 = x1 - x2;
+		let dx2 = x3 - x2;
+		let dx3 = x0 - x1 + x2 - x3;
+		let dy1 = y1 - y2;
+		let denominator = dx1 * dy2 - dx2 * dy1;
+		let a13 = (dx3 * dy2 - dx2 * dy3) / denominator;
+		let a23 = (dx1 * dy3 - dx3 * dy1) / denominator;
 		return new PerspectiveTransform(x1 - x0 + a13 * x1, x3 - x0 + a23 * x3, x0, y1 - y0 + a13 * y1, y3 - y0 + a23 * y3, y0, a13, a23, 1.0);
 	}
 }
@@ -131,10 +131,10 @@ function Detector(image)
 		{
 			// Mild variant of Bresenham's algorithm;
 			// see http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
-			var steep = Math.abs(toY - fromY) > Math.abs(toX - fromX);
+			let steep = Math.abs(toY - fromY) > Math.abs(toX - fromX);
 			if (steep)
 			{
-				var temp = fromX;
+				let temp = fromX;
 				fromX = fromY;
 				fromY = temp;
 				temp = toX;
@@ -142,17 +142,17 @@ function Detector(image)
 				toY = temp;
 			}
 			
-			var dx = Math.abs(toX - fromX);
-			var dy = Math.abs(toY - fromY);
-			var error = - dx >> 1;
-			var ystep = fromY < toY?1:- 1;
-			var xstep = fromX < toX?1:- 1;
-			var state = 0; // In black pixels, looking for white, first or second time
-			for (var x = fromX, y = fromY; x != toX; x += xstep)
+			let dx = Math.abs(toX - fromX);
+			let dy = Math.abs(toY - fromY);
+			let error = - dx >> 1;
+			let ystep = fromY < toY?1:- 1;
+			let xstep = fromX < toX?1:- 1;
+			let state = 0; // In black pixels, looking for white, first or second time
+			for (let x = fromX, y = fromY; x != toX; x += xstep)
 			{
 				
-				var realX = steep?y:x;
-				var realY = steep?x:y;
+				let realX = steep?y:x;
+				let realY = steep?x:y;
 				if (state == 1)
 				{
 					// In white pixels, looking for black
@@ -172,8 +172,8 @@ function Detector(image)
 				if (state == 3)
 				{
 					// Found black, white, black, and stumbled back onto white; done
-					var diffX = x - fromX;
-					var diffY = y - fromY;
+					let diffX = x - fromX;
+					let diffY = y - fromY;
 					return  Math.sqrt( (diffX * diffX + diffY * diffY));
 				}
 				error += dy;
@@ -187,8 +187,8 @@ function Detector(image)
 					error -= dx;
 				}
 			}
-			var diffX2 = toX - fromX;
-			var diffY2 = toY - fromY;
+			let diffX2 = toX - fromX;
+			let diffY2 = toY - fromY;
 			return  Math.sqrt( (diffX2 * diffX2 + diffY2 * diffY2));
 		}
 
@@ -196,11 +196,11 @@ function Detector(image)
 	this.sizeOfBlackWhiteBlackRunBothWays=function( fromX,  fromY,  toX,  toY)
 		{
 			
-			var result = this.sizeOfBlackWhiteBlackRun(fromX, fromY, toX, toY);
+			let result = this.sizeOfBlackWhiteBlackRun(fromX, fromY, toX, toY);
 			
 			// Now count other way -- don't run off image though of course
-			var scale = 1.0;
-			var otherToX = fromX - (toX - fromX);
+			let scale = 1.0;
+			let otherToX = fromX - (toX - fromX);
 			if (otherToX < 0)
 			{
 				scale =  fromX /  (fromX - otherToX);
@@ -211,7 +211,7 @@ function Detector(image)
 				scale =  (qrcode.width - 1 - fromX) /  (otherToX - fromX);
 				otherToX = qrcode.width - 1;
 			}
-			var otherToY = Math.floor (fromY - (toY - fromY) * scale);
+			let otherToY = Math.floor (fromY - (toY - fromY) * scale);
 			
 			scale = 1.0;
 			if (otherToY < 0)
@@ -234,8 +234,8 @@ function Detector(image)
 	
 	this.calculateModuleSizeOneWay=function( pattern,  otherPattern)
 		{
-			var moduleSizeEst1 = this.sizeOfBlackWhiteBlackRunBothWays(Math.floor( pattern.X), Math.floor( pattern.Y), Math.floor( otherPattern.X), Math.floor(otherPattern.Y));
-			var moduleSizeEst2 = this.sizeOfBlackWhiteBlackRunBothWays(Math.floor(otherPattern.X), Math.floor(otherPattern.Y), Math.floor( pattern.X), Math.floor(pattern.Y));
+			let moduleSizeEst1 = this.sizeOfBlackWhiteBlackRunBothWays(Math.floor( pattern.X), Math.floor( pattern.Y), Math.floor( otherPattern.X), Math.floor(otherPattern.Y));
+			let moduleSizeEst2 = this.sizeOfBlackWhiteBlackRunBothWays(Math.floor(otherPattern.X), Math.floor(otherPattern.Y), Math.floor( pattern.X), Math.floor(pattern.Y));
 			if (isNaN(moduleSizeEst1))
 			{
 				return moduleSizeEst2 / 7.0;
@@ -258,16 +258,16 @@ function Detector(image)
 
 	this.distance=function( pattern1,  pattern2)
 	{
-		var xDiff = pattern1.X - pattern2.X;
-		var yDiff = pattern1.Y - pattern2.Y;
+		let xDiff = pattern1.X - pattern2.X;
+		let yDiff = pattern1.Y - pattern2.Y;
 		return  Math.sqrt( (xDiff * xDiff + yDiff * yDiff));
 	}
 	this.computeDimension=function( topLeft,  topRight,  bottomLeft,  moduleSize)
 		{
 			
-			var tltrCentersDimension = Math.round(this.distance(topLeft, topRight) / moduleSize);
-			var tlblCentersDimension = Math.round(this.distance(topLeft, bottomLeft) / moduleSize);
-			var dimension = ((tltrCentersDimension + tlblCentersDimension) >> 1) + 7;
+			let tltrCentersDimension = Math.round(this.distance(topLeft, topRight) / moduleSize);
+			let tlblCentersDimension = Math.round(this.distance(topLeft, bottomLeft) / moduleSize);
+			let dimension = ((tltrCentersDimension + tlblCentersDimension) >> 1) + 7;
 			switch (dimension & 0x03)
 			{
 				
@@ -291,28 +291,28 @@ function Detector(image)
 		{
 			// Look for an alignment pattern (3 modules in size) around where it
 			// should be
-			var allowance = Math.floor (allowanceFactor * overallEstModuleSize);
-			var alignmentAreaLeftX = Math.max(0, estAlignmentX - allowance);
-			var alignmentAreaRightX = Math.min(qrcode.width - 1, estAlignmentX + allowance);
+			let allowance = Math.floor (allowanceFactor * overallEstModuleSize);
+			let alignmentAreaLeftX = Math.max(0, estAlignmentX - allowance);
+			let alignmentAreaRightX = Math.min(qrcode.width - 1, estAlignmentX + allowance);
 			if (alignmentAreaRightX - alignmentAreaLeftX < overallEstModuleSize * 3)
 			{
 				throw "Error";
 			}
 			
-			var alignmentAreaTopY = Math.max(0, estAlignmentY - allowance);
-			var alignmentAreaBottomY = Math.min(qrcode.height - 1, estAlignmentY + allowance);
+			let alignmentAreaTopY = Math.max(0, estAlignmentY - allowance);
+			let alignmentAreaBottomY = Math.min(qrcode.height - 1, estAlignmentY + allowance);
 			
-			var alignmentFinder = new AlignmentPatternFinder(this.image, alignmentAreaLeftX, alignmentAreaTopY, alignmentAreaRightX - alignmentAreaLeftX, alignmentAreaBottomY - alignmentAreaTopY, overallEstModuleSize, this.resultPointCallback);
+			let alignmentFinder = new AlignmentPatternFinder(this.image, alignmentAreaLeftX, alignmentAreaTopY, alignmentAreaRightX - alignmentAreaLeftX, alignmentAreaBottomY - alignmentAreaTopY, overallEstModuleSize, this.resultPointCallback);
 			return alignmentFinder.find();
 		}
 		
 	this.createTransform=function( topLeft,  topRight,  bottomLeft, alignmentPattern, dimension)
 		{
-			var dimMinusThree =  dimension - 3.5;
-			var bottomRightX;
-			var bottomRightY;
-			var sourceBottomRightX;
-			var sourceBottomRightY;
+			let dimMinusThree =  dimension - 3.5;
+			let bottomRightX;
+			let bottomRightY;
+			let sourceBottomRightX;
+			let sourceBottomRightY;
 			if (alignmentPattern != null)
 			{
 				bottomRightX = alignmentPattern.X;
@@ -327,7 +327,7 @@ function Detector(image)
 				sourceBottomRightX = sourceBottomRightY = dimMinusThree;
 			}
 			
-			var transform = PerspectiveTransform.quadrilateralToQuadrilateral(3.5, 3.5, dimMinusThree, 3.5, sourceBottomRightX, sourceBottomRightY, 3.5, dimMinusThree, topLeft.X, topLeft.Y, topRight.X, topRight.Y, bottomRightX, bottomRightY, bottomLeft.X, bottomLeft.Y);
+			let transform = PerspectiveTransform.quadrilateralToQuadrilateral(3.5, 3.5, dimMinusThree, 3.5, sourceBottomRightX, sourceBottomRightY, 3.5, dimMinusThree, topLeft.X, topLeft.Y, topRight.X, topRight.Y, bottomRightX, bottomRightY, bottomLeft.X, bottomLeft.Y);
 			
 			return transform;
 		}		
@@ -335,43 +335,43 @@ function Detector(image)
 	this.sampleGrid=function( image,  transform,  dimension)
 		{
 			
-			var sampler = GridSampler;
+			let sampler = GridSampler;
 			return sampler.sampleGrid3(image, dimension, transform);
 		}
 	
 	this.processFinderPatternInfo = function( info)
 		{
 			
-			var topLeft = info.TopLeft;
-			var topRight = info.TopRight;
-			var bottomLeft = info.BottomLeft;
+			let topLeft = info.TopLeft;
+			let topRight = info.TopRight;
+			let bottomLeft = info.BottomLeft;
 			
-			var moduleSize = this.calculateModuleSize(topLeft, topRight, bottomLeft);
+			let moduleSize = this.calculateModuleSize(topLeft, topRight, bottomLeft);
 			if (moduleSize < 1.0)
 			{
 				throw "Error";
 			}
-			var dimension = this.computeDimension(topLeft, topRight, bottomLeft, moduleSize);
-			var provisionalVersion = Version.getProvisionalVersionForDimension(dimension);
-			var modulesBetweenFPCenters = provisionalVersion.DimensionForVersion - 7;
+			let dimension = this.computeDimension(topLeft, topRight, bottomLeft, moduleSize);
+			let provisionalVersion = Version.getProvisionalVersionForDimension(dimension);
+			let modulesBetweenFPCenters = provisionalVersion.DimensionForVersion - 7;
 			
-			var alignmentPattern = null;
+			let alignmentPattern = null;
 			// Anything above version 1 has an alignment pattern
 			if (provisionalVersion.AlignmentPatternCenters.length > 0)
 			{
 				
 				// Guess where a "bottom right" finder pattern would have been
-				var bottomRightX = topRight.X - topLeft.X + bottomLeft.X;
-				var bottomRightY = topRight.Y - topLeft.Y + bottomLeft.Y;
+				let bottomRightX = topRight.X - topLeft.X + bottomLeft.X;
+				let bottomRightY = topRight.Y - topLeft.Y + bottomLeft.Y;
 				
 				// Estimate that alignment pattern is closer by 3 modules
 				// from "bottom right" to known top left location
-				var correctionToTopLeft = 1.0 - 3.0 /  modulesBetweenFPCenters;
-				var estAlignmentX = Math.floor (topLeft.X + correctionToTopLeft * (bottomRightX - topLeft.X));
-				var estAlignmentY = Math.floor (topLeft.Y + correctionToTopLeft * (bottomRightY - topLeft.Y));
+				let correctionToTopLeft = 1.0 - 3.0 /  modulesBetweenFPCenters;
+				let estAlignmentX = Math.floor (topLeft.X + correctionToTopLeft * (bottomRightX - topLeft.X));
+				let estAlignmentY = Math.floor (topLeft.Y + correctionToTopLeft * (bottomRightY - topLeft.Y));
 				
 				// Kind of arbitrary -- expand search radius before giving up
-				for (var i = 4; i <= 16; i <<= 1)
+				for (let i = 4; i <= 16; i <<= 1)
 				{
 					//try
 					//{
@@ -386,11 +386,11 @@ function Detector(image)
 				// If we didn't find alignment pattern... well try anyway without it
 			}
 			
-			var transform = this.createTransform(topLeft, topRight, bottomLeft, alignmentPattern, dimension);
+			let transform = this.createTransform(topLeft, topRight, bottomLeft, alignmentPattern, dimension);
 			
-			var bits = this.sampleGrid(this.image, transform, dimension);
+			let bits = this.sampleGrid(this.image, transform, dimension);
 			
-			var points;
+			let points;
 			if (alignmentPattern == null)
 			{
 				points = new Array(bottomLeft, topLeft, topRight);
@@ -406,7 +406,7 @@ function Detector(image)
 	
 	this.detect=function()
 	{
-		var info =  new FinderPatternFinder().findFinderPattern(this.image);
+		let info =  new FinderPatternFinder().findFinderPattern(this.image);
 			
 		return this.processFinderPatternInfo(info); 
 	}
